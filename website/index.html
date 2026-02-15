@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grab Food & Ride - Food Delivery and Ride Booking</title>
+    <meta name="description" content="Order food from your favorite restaurants and book rides with Grab Food & Ride">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <div class="logo-icon">G</div>
+                    <span class="logo-text">Grab</span>
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="nav-links desktop-only">
+                    <a href="#food" class="nav-link">GrabFood</a>
+                    <a href="#ride" class="nav-link">GrabCar</a>
+                    <a href="#promos" class="nav-link">Promos</a>
+                </div>
+
+                <!-- Desktop Actions -->
+                <div class="nav-actions desktop-only">
+                    <button class="btn-ghost">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Set location
+                    </button>
+                    <button class="btn-icon theme-toggle" id="themeToggle">
+                        <svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn-icon cart-btn" id="cartBtn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="btn-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                    <button class="btn-primary">Sign In</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="mobile-actions">
+                    <button class="btn-icon theme-toggle" id="themeToggleMobile">
+                        <svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="icon menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                        <svg class="icon close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#food" class="mobile-nav-link">GrabFood</a>
+            <a href="#ride" class="mobile-nav-link">GrabCar</a>
+            <a href="#promos" class="mobile-nav-link">Promos</a>
+            <button class="btn-primary mobile-signin">Sign In</button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-background" id="heroBackground">
+                <img src="../src/assets/food-hero.jpg" alt="Food delivery" class="hero-image active" id="foodHero">
+                <img src="../src/assets/ride-hero.jpg" alt="Car ride" class="hero-image" id="rideHero">
+                <div class="hero-overlay"></div>
+            </div>
+
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title" id="heroTitle">Delicious food, delivered to you</h1>
+                    <p class="hero-subtitle" id="heroSubtitle">Order from your favourite restaurants and get it delivered fast.</p>
+
+                    <!-- Service Tabs -->
+                    <div class="service-tabs">
+                        <button class="service-tab active" data-service="food">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            GrabFood
+                        </button>
+                        <button class="service-tab" data-service="ride">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path>
+                                <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                            </svg>
+                            GrabCar
+                        </button>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <div class="search-food" id="searchFood">
+                            <div class="search-input-wrapper">
+                                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="M21 21l-4.35-4.35"></path>
+                                </svg>
+                                <input type="text" placeholder="Search for restaurants or dishes..." class="search-input">
+                            </div>
+                            <button class="btn-search">Search</button>
+                        </div>
+                        <div class="search-ride" id="searchRide" style="display: none;">
+                            <div class="search-input-wrapper">
+                                <div class="pickup-dot"></div>
+                                <input type="text" placeholder="Pickup location" class="search-input">
+                            </div>
+                            <div class="search-input-wrapper">
+                                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <input type="text" placeholder="Where to?" class="search-input">
+                            </div>
+                            <button class="btn-search" onclick="openRideBooking()">Book</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Food Categories -->
+        <section id="food" class="food-categories">
+            <div class="container">
+                <h2 class="section-title">What's on your mind?</h2>
+                <p class="section-subtitle">Explore by category</p>
+                <div class="categories-grid">
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-burger.jpg" alt="Burgers">
+                        </div>
+                        <span class="category-name">Burgers</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-noodles.jpg" alt="Noodles">
+                        </div>
+                        <span class="category-name">Noodles</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-pizza.jpg" alt="Pizza">
+                        </div>
+                        <span class="category-name">Pizza</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-drinks.jpg" alt="Drinks">
+                        </div>
+                        <span class="category-name">Drinks</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-rice.jpg" alt="Rice">
+                        </div>
+                        <span class="category-name">Rice</span>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-image">
+                            <img src="../src/assets/food-healthy.jpg" alt="Healthy">
+                        </div>
+                        <span class="category-name">Healthy</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Restaurant Cards -->
+        <section class="restaurants">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Nearby Restaurants</h2>
+                        <p class="section-subtitle">Popular spots around you</p>
+                    </div>
+                    <button class="link-btn">See all</button>
+                </div>
+                <div class="restaurants-grid" id="restaurantsGrid">
+                    <!-- Restaurant cards will be generated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Promo Section -->
+        <section id="promos" class="promos">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Coupons & Promos</h2>
+                        <p class="section-subtitle">Save more on every order and ride</p>
+                    </div>
+                    <button class="link-btn">
+                        View all
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </div>
+                <div class="promos-grid" id="promosGrid">
+                    <!-- Promo cards will be generated by JS -->
+                </div>
+
+                <!-- Rewards Section -->
+                <div class="rewards-section">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">GrabRewards</h2>
+                            <p class="section-subtitle">Earn points with every order and ride</p>
+                        </div>
+                    </div>
+                    <div class="rewards-card">
+                        <div class="rewards-header">
+                            <div>
+                                <p class="rewards-label">Your Points</p>
+                                <p class="rewards-points">1,250</p>
+                            </div>
+                            <div class="rewards-tier">
+                                <p class="rewards-label">Member Tier</p>
+                                <span class="tier-badge">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Gold
+                                </span>
+                            </div>
+                        </div>
+                        <div class="rewards-progress">
+                            <div class="progress-labels">
+                                <span>Gold</span>
+                                <span>Platinum (2,000 pts)</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 62.5%"></div>
+                            </div>
+                            <p class="progress-text">750 points to Platinum</p>
+                        </div>
+                        <div class="rewards-grid" id="rewardsGrid">
+                            <!-- Reward items will be generated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ride Section -->
+        <section id="ride" class="ride-section">
+            <div class="container">
+                <h2 class="section-title">Go anywhere with GrabCar</h2>
+                <p class="section-subtitle">Safe, reliable, and affordable rides at your fingertips.</p>
+
+                <div class="ride-content">
+                    <div class="ride-card">
+                        <h3 class="ride-card-title">Ready to go?</h3>
+                        <p class="ride-card-text">Pick your location and destination on the next screen.</p>
+                        <button class="btn-primary ride-book-btn" onclick="openRideBooking()">Book GrabCar</button>
+                    </div>
+                    <div class="ride-map">
+                        <iframe
+                            title="Malaysia Map"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=100.0,1.2,104.5,6.8&layer=mapnik&marker=3.139,101.6869"
+                            class="map-iframe"
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="ride-features" id="rideFeatures">
+                    <!-- Features will be generated by JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-icon">G</div>
+                        <span class="logo-text">Grab</span>
+                    </div>
+                    <p class="footer-text">The everyday everything app for Southeast Asia.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#food">GrabFood</a></li>
+                        <li><a href="#ride">GrabCar</a></li>
+                        <li><a href="#">GrabPay</a></li>
+                        <li><a href="#promos">GrabRewards</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Centre</a></li>
+                        <li><a href="#">Safety</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Grab. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Ride Booking Modal -->
+    <div class="modal" id="rideBookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Book a Ride</h2>
+                <button class="modal-close" onclick="closeRideBooking()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="location-inputs">
+                    <div class="location-input-wrapper">
+                        <div class="location-input-group">
+                            <div class="pickup-dot"></div>
+                            <input type="text" id="pickupLocation" placeholder="Pickup location" class="location-input" autocomplete="off">
+                            <button class="btn-map" onclick="pickLocationOnMap('pickup')">📍 Pick on Map</button>
+                        </div>
+                        <div class="autocomplete-suggestions" id="pickupSuggestions"></div>
+                    </div>
+                    <div class="location-input-wrapper">
+                        <div class="location-input-group">
+                            <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <input type="text" id="destinationLocation" placeholder="Where to?" class="location-input" autocomplete="off">
+                            <button class="btn-map" onclick="pickLocationOnMap('destination')">📍 Pick on Map</button>
+                        </div>
+                        <div class="autocomplete-suggestions" id="destinationSuggestions"></div>
+                    </div>
+                </div>
+                <div class="interactive-map-container" id="interactiveMap"></div>
+                <button class="btn-primary btn-full" id="confirmRideBtn" onclick="confirmRide()" disabled>Confirm Ride</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Driver Matching Modal -->
+    <div class="modal" id="driverMatchingModal">
+        <div class="modal-content matching-modal">
+            <div class="matching-content">
+                <div class="matching-animation">
+                    <div class="matching-circle"></div>
+                    <div class="matching-pulse"></div>
+                </div>
+                <h2>Finding your driver...</h2>
+                <p class="matching-text" id="matchingText">Searching nearby drivers</p>
+                <div class="driver-info" id="driverInfo" style="display: none;">
+                    <div class="driver-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Driver&background=00b14f&color=fff" alt="Driver">
+                    </div>
+                    <h3 id="driverName">Ahmad Rahman</h3>
+                    <p class="driver-rating">
+                        <span>⭐ 4.9</span>
+                        <span id="driverCar">Toyota Vios • ABC 1234</span>
+                    </p>
+                    <p class="driver-eta">Estimated arrival: <strong id="driverETA">3 minutes</strong></p>
+                    <button class="btn-primary btn-full" onclick="closeDriverMatching()">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Ordering Modal -->
+    <div class="modal" id="foodOrderModal">
+        <div class="modal-content food-modal">
+            <div class="modal-header">
+                <h2 id="restaurantName">Restaurant Menu</h2>
+                <button class="modal-close" onclick="closeFoodOrder()">&times;</button>
+            </div>
+            <div class="modal-body food-menu-body">
+                <div class="menu-items" id="menuItems">
+                    <!-- Menu items will be generated by JS -->
+                </div>
+                <div class="cart-summary" id="cartSummary">
+                    <div class="cart-items" id="cartItemsList">
+                        <p class="empty-cart">Your cart is empty</p>
+                    </div>
+                    <div class="cart-total">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal">RM 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery Fee:</span>
+                            <span id="deliveryFee">RM 3.00</span>
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total:</span>
+                            <span id="cartTotal">RM 3.00</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-full" id="checkoutBtn" onclick="openCheckout()" disabled>Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content checkout-modal">
+            <div class="modal-header">
+                <h2>Checkout</h2>
+                <button class="modal-close" onclick="closeCheckout()">&times;</button>
+            </div>
+            <div class="modal-body checkout-body">
+                <div class="checkout-section">
+                    <h3>Delivery Address</h3>
+                    <input type="text" id="deliveryAddress" placeholder="Enter delivery address" class="checkout-input">
+                </div>
+                <div class="checkout-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="grabpay" checked>
+                            <span>GrabPay</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="card">
+                            <span>Credit/Debit Card</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cash">
+                            <span>Cash on Delivery</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="checkout-section">
+                    <h3>Order Summary</h3>
+                    <div class="order-items" id="checkoutItems">
+                        <!-- Items will be populated by JS -->
+                    </div>
+                    <div class="order-total">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="checkoutSubtotal">RM 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery Fee:</span>
+                            <span>RM 3.00</span>
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total:</span>
+                            <span id="checkoutTotal">RM 3.00</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary btn-full" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div class="modal" id="orderConfirmModal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-content">
+                <div class="confirm-icon">✅</div>
+                <h2>Order Placed Successfully!</h2>
+                <p>Your order is being prepared and will be delivered soon.</p>
+                <p class="order-id">Order ID: <strong id="orderId">GRAB-123456</strong></p>
+                <button class="btn-primary btn-full" onclick="closeOrderConfirm()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
+

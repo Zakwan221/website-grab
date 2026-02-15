@@ -1,0 +1,71 @@
+===========================================
+REQUIRED FILES & FOLDERS FOR STANDALONE WEBSITE
+===========================================
+
+To make your website work, you need to save these files and folders:
+
+📁 FOLDER STRUCTURE:
+===================
+
+website/
+├── index.html          ✅ REQUIRED - Main HTML file
+├── index.css           ✅ REQUIRED - All styles
+└── index.js            ✅ REQUIRED - All JavaScript functionality
+
+src/
+└── assets/             ✅ REQUIRED - Image folder
+    ├── food-burger.jpg
+    ├── food-drinks.jpg
+    ├── food-healthy.jpg
+    ├── food-hero.jpg
+    ├── food-noodles.jpg
+    ├── food-pizza.jpg
+    ├── food-rice.jpg
+    └── ride-hero.jpg
+
+===========================================
+MINIMUM FILES TO SAVE:
+===========================================
+
+1. website/index.html
+2. website/index.css
+3. website/index.js
+4. src/assets/ (entire folder with all 8 images)
+
+===========================================
+HOW TO USE:
+===========================================
+
+1. Keep the folder structure as shown above
+2. Open website/index.html in any web browser
+3. That's it! No server or build process needed.
+
+===========================================
+IMPORTANT NOTES:
+===========================================
+
+- The website folder and src folder should be at the SAME level
+- Example structure:
+  
+  YourProject/
+  ├── website/
+  │   ├── index.html
+  │   ├── index.css
+  │   └── index.js
+  └── src/
+      └── assets/
+          ├── food-burger.jpg
+          ├── food-drinks.jpg
+          ├── food-healthy.jpg
+          ├── food-hero.jpg
+          ├── food-noodles.jpg
+          ├── food-pizza.jpg
+          ├── food-rice.jpg
+          └── ride-hero.jpg
+
+- All images are loaded from: ../src/assets/
+- No other files are needed!
+- You can delete everything else from the project
+
+===========================================
+
